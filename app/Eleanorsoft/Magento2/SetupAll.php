@@ -17,6 +17,7 @@ class SetupAll extends CommandAbstract
 				$path = rtrim($argumentList->get('docker-skeleton-path', './'), '/');
 				$argumentList->set('magento2-composer-path', $path);
 				$argumentList->set('magento2-docroot-path', $path . '/www/html/');
+				$argumentList->set('magento2-set-owner-after-download', 'www-data:www-data');
 				@unlink($path . '/www/html/index.php');
 			},
 			Download::class,

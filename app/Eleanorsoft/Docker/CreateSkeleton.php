@@ -42,6 +42,9 @@ class CreateSkeleton extends CommandAbstract
 
             Util::moveDir($path . '/web-server-docker-template-master', $path);
 
+            $mysqlPassword = Util::getRandomString();
+            $argumentList->set('docker-skeleton-mysql-password', $mysqlPassword);
+
             $dockerComposeConfig = file_get_contents($path . '/docker-compose.yml');
             $dockerComposeConfig = str_replace(
                 [
@@ -57,7 +60,7 @@ class CreateSkeleton extends CommandAbstract
                     $argumentList->get('docker-skeleton-port-prefix', '501'),
                     Util::getRandomString(),
                     $argumentList->get('docker-skeleton-name', 'noname'),
-                    Util::getRandomString(),
+                    $mysqlPassword,
                     Util::getRandomString(),
                 ],
                 $dockerComposeConfig
