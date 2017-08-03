@@ -17,11 +17,13 @@ class CreateSkeleton extends CommandAbstract
 
     public function run(ArgumentList $argumentList)
     {
-        print "Create skeleton ";
+        Util::output("Setting up docker container with skeleton\n");
+        Util::output("Download skeleton... ");
         $archive = file_get_contents(self::ZIP_URL);
         if (!$archive) {
             die("Can't download skeleton");
         }
+        Util::output("done\n");
 
         if (!class_exists('\ZipArchive')) {
             die("Zip extension for PHP not found");
@@ -60,7 +62,12 @@ class CreateSkeleton extends CommandAbstract
                 ],
                 $dockerComposeConfig
             );
+
+            Util::output("Write docker-compose.yml... ");
             file_put_contents($path . '/docker-compose.yml', $dockerComposeConfig);
+            Util::output("done\n");
+
+
         } else {
             die("Can't open zip archive " . $res);
         }

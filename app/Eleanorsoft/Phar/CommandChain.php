@@ -16,7 +16,11 @@ class CommandChain
     public function __construct(array $commands = [])
     {
         foreach ($commands as $cmd) {
-            $this->commands[] = new $cmd();
+            if (is_callable($cmd)) {
+                $this->commands[] = $cmd;
+            } else {
+                $this->commands[] = new $cmd();
+            }
         }
     }
 
@@ -24,10 +28,10 @@ class CommandChain
     {
 
         foreach ($this->commands as $command) {
-            if (is_object($command)) {
-                $command->run($argumentList);
-            } else {
+            if (is_callable($command)) {
                 $command($argumentList);
+            } else {
+                $command->run($argumentList);
             }
         }
     }

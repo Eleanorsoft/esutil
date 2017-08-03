@@ -12,6 +12,14 @@ class SetupAll extends CommandAbstract
 	{
 		parent::__construct([
 			CreateSkeleton::class,
+			ConfigureNginxInDockerContainer::class,
+			function (ArgumentList $argumentList) {
+				$path = rtrim($argumentList->get('docker-skeleton-path', './'), '/');
+				$argumentList->set('magento2-composer-path', $path);
+				$argumentList->set('magento2-docroot-path', $path . '/www/html/');
+				@unlink($path . '/www/html/index.php');
+			},
+			Download::class,
 		]);
 	}
 
