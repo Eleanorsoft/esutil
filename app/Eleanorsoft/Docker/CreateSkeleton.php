@@ -45,6 +45,9 @@ class CreateSkeleton extends CommandAbstract
             $mysqlPassword = Util::getRandomString();
             $argumentList->set('docker-skeleton-mysql-password', $mysqlPassword);
 
+            $sftpPassword = Util::getRandomString();
+            $argumentList->set('docker-skeleton-sftp-password', $sftpPassword);
+
             $dockerComposeConfig = file_get_contents($path . '/docker-compose.yml');
             $dockerComposeConfig = str_replace(
                 [
@@ -61,7 +64,7 @@ class CreateSkeleton extends CommandAbstract
                     Util::getRandomString(),
                     $argumentList->get('docker-skeleton-name', 'noname'),
                     $mysqlPassword,
-                    Util::getRandomString(),
+                    $sftpPassword,
                 ],
                 $dockerComposeConfig
             );

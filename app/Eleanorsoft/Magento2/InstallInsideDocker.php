@@ -28,6 +28,8 @@ class InstallInsideDocker extends CommandAbstract
 
         $mysqlPassword = $argumentList->get('docker-skeleton-mysql-password');
 
+        $baseUrl = $argumentList->get('magento2-base-url', 'http://127.0.0.1:' . $nginxPort);
+
         $phpContainerName = implode(
             '_',
             [
@@ -58,7 +60,7 @@ class InstallInsideDocker extends CommandAbstract
             die("Can't find container id for $phpContainerName");
         }
 
-        $cmd = "docker exec -it --user 33 $containerId sh -c \"php bin/magento setup:install --admin-firstname=John --admin-lastname=Doe --admin-email='hello@eleanorsoft.com' --admin-user=$adminName --admin-password='$adminPassword' --base-url='http://$projectName.dev.eleanorsoft.com:$nginxPort/' --backend-frontname='$adminName' --db-host='{$projectName}_mysql' --db-name='{$projectName}' --db-user='{$projectName}' --db-password='$mysqlPassword' --use-rewrites=1 --language=en_US --currency=USD --timezone=America/Chicago\"";
+        $cmd = "docker exec -it --user 33 $containerId sh -c \"php bin/magento setup:install --admin-firstname=John --admin-lastname=Doe --admin-email='hello@eleanorsoft.com' --admin-user=$adminName --admin-password='$adminPassword' --base-url='$baseUrl' --backend-frontname='$adminName' --db-host='{$projectName}_mysql' --db-name='{$projectName}' --db-user='{$projectName}' --db-password='$mysqlPassword' --use-rewrites=1 --language=en_US --currency=USD --timezone=America/Chicago\"";
         Util::output("Run `$cmd`\n");
         `$cmd`;
 
