@@ -19,7 +19,6 @@ class Download extends CommandAbstract
         $installer = file_get_contents('https://getcomposer.org/installer');
         $path = rtrim($argumentList->get('magento2-composer-path', './'), '/');
         $docroot = rtrim($argumentList->get('magento2-docroot-path', './'), '/');
-        $newOwner = trim($argumentList->get('magento2-set-owner-after-download', ''));
         file_put_contents($path . '/installer', $installer);
         $currentPath = getcwd();
         chdir($path);
@@ -28,10 +27,6 @@ class Download extends CommandAbstract
         @unlink($path . '/installer');
 
         `php $path/composer.phar create-project --repository-url=https://repo.magento.com/ magento/project-community-edition $docroot`;
-
-        if ($newOwner) {
-            `chown -R $newOwner $docroot`;
-        }
 
         Util::output("done\n");
     }

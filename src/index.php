@@ -2,9 +2,9 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-function __autoload($name) {
-	require_once 'phar://esutil.phar/' . str_replace('\\', '/' , $name) . '.php';
-}
+require 'config.php';
+\Eleanorsoft\Util::output(sprintf("Eleanorsoft Utility, version %s\n", $version));
+\Eleanorsoft\Util::output(sprintf("by Eleanorsoft (https://www.eleanorsoft.com/)\n\n"));
 
 $aliases = array(
 	'magento2/' => 'Eleanorsoft\\Magento2',
@@ -32,5 +32,14 @@ if (!class_exists($class)) {
 $args = new \Eleanorsoft\Phar\ArgumentList(array_slice($argv, 2));
 $c = new $class();
 $c->run($args);
+
+/**
+ * Autoload function for files inside phar archive
+ *
+ * @param $name
+ */
+function __autoload($className) {
+    require_once 'phar://esutil.phar/' . str_replace('\\', '/' , $className) . '.php';
+}
 
 __HALT_COMPILER();

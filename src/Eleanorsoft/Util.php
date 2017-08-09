@@ -1,6 +1,13 @@
 <?php
 namespace Eleanorsoft;
 
+/**
+ * Class Util
+ *
+ * @package Eleanorsoft Utility
+ * @author Konstantin Esin <kostofffan@gmail.com>
+ * @since 1.0.0
+ */
 class Util
 {
     public static function copyDir($src, $dst)
@@ -64,5 +71,14 @@ class Util
     public static function log($msg)
     {
         print '[log] ' . $msg . "\n";
+    }
+
+    /**
+     * Is the application working on Windows
+     * @return bool
+     */
+    public static function isWindows()
+    {
+        return (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
     }
 }
