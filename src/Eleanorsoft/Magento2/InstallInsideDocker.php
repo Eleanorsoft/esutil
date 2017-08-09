@@ -74,7 +74,7 @@ class InstallInsideDocker extends CommandAbstract
             die("Can't find container id for $phpContainerName");
         }
 
-        $cmd = "docker exec -it --user 33 $containerId sh -c \"php bin/magento setup:install --admin-firstname=John --admin-lastname=Doe --admin-email='hello@eleanorsoft.com' --admin-user=$adminName --admin-password='$adminPassword' --base-url='$baseUrl' --backend-frontname='$adminName' --db-host='{$projectName}_mysql' --db-name='{$projectName}' --db-user='{$projectName}' --db-password='$mysqlPassword' --use-rewrites=1 --language=en_US --currency=USD --timezone=America/Chicago\"";
+        $cmd = "docker exec -it --user 33 $containerId sh -c \"php bin/magento setup:install --admin-firstname=John --admin-lastname=Doe --admin-email=hello@eleanorsoft.com --admin-user=$adminName --admin-password=$adminPassword --base-url=$baseUrl --backend-frontname=$adminName --db-host={$projectName}_mysql --db-name={$projectName} --db-user={$projectName} --db-password=$mysqlPassword --use-rewrites=1 --language=en_US --currency=USD --timezone=America/Chicago\"";
         Util::output("Run `$cmd`\n");
         `$cmd`;
 
@@ -95,7 +95,7 @@ class InstallInsideDocker extends CommandAbstract
         return
             Util::getRandomString(1, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') .
             Util::getRandomString(1, '0123456789') .
-            Util::getRandomString(1, '@!*^%$#()?<>') .
+            Util::getRandomString(1, '@*^%$#()?<>') .
             Util::getRandomString();
     }
 }

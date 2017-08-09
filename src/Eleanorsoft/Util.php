@@ -53,7 +53,7 @@ class Util
         }
     }
 
-    public static function getRandomString($length = 10, $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@!*^%$#()?<>')
+    public static function getRandomString($length = 10, $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@*^%$#()?<>')
     {
         $charactersLength = strlen($characters);
         $randomString = '';
