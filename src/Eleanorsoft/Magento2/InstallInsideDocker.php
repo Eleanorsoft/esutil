@@ -95,7 +95,7 @@ class InstallInsideDocker extends CommandAbstract
         return
             Util::getRandomString(1, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') .
             Util::getRandomString(1, '0123456789') .
-            Util::getRandomString(1, '@*^%$#()?<>') .
+            Util::getRandomString(1, '@*^%#()<>') .
             Util::getRandomString();
     }
 }
