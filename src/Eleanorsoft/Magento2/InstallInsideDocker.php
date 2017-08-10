@@ -74,7 +74,7 @@ class InstallInsideDocker extends CommandAbstract
             die("Can't find container id for $phpContainerName");
         }
 
-        $cmd = "docker exec -it --user 33 $containerId sh -c \"php bin/magento setup:install --admin-firstname=John --admin-lastname=Doe --admin-email=hello@eleanorsoft.com --admin-user=$adminName --admin-password=$adminPassword --base-url=$baseUrl --backend-frontname=$adminName --db-host={$projectName}_mysql --db-name={$projectName} --db-user={$projectName} --db-password=$mysqlPassword --use-rewrites=1 --language=en_US --currency=USD --timezone=America/Chicago\"";
+        $cmd = "docker exec -it --user 33 $containerId sh -c \"php bin/magento setup:install --admin-firstname='John' --admin-lastname='Doe' --admin-email='hello@eleanorsoft.com' --admin-user='$adminName' --admin-password='$adminPassword' --base-url='$baseUrl' --backend-frontname='$adminName' --db-host='{$projectName}_mysql' --db-name='{$projectName}' --db-user='{$projectName}' --db-password='$mysqlPassword' --use-rewrites=1 --language=en_US --currency=USD --timezone=America/Chicago\"";
         Util::output("Run `$cmd`\n");
         `$cmd`;
 
@@ -83,6 +83,17 @@ class InstallInsideDocker extends CommandAbstract
         }
 
         Util::output("done\n");
+
+        Util::output("\n\n" . str_repeat('*', 30) . "\n\n");
+
+        Util::output(sprintf(
+            "Admin Panel:\n\tURL: %s\n\tLogin: %s\n\tPassword: %s\n\n",
+            "{$baseUrl}{$adminName}",
+            $adminName,
+            $adminPassword
+        ));
+
+        Util::output("\n\n" . str_repeat('*', 30) . "\n\n");
     }
 
     /**

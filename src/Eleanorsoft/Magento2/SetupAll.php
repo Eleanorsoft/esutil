@@ -35,6 +35,8 @@ class SetupAll extends CommandAbstract
 
 				$baseUrl = "http://$domain:$nginxPort/";
 
+				Util::output("\n\n" . str_repeat('*', 30) . "\n\n");
+
 				Util::output(sprintf(
 					"Main URL: %s\nphpMyAdmin:\n\tURL: %s\n\tLogin: %s\n\tPassword: %s\n\n",
 					$baseUrl,
@@ -48,6 +50,8 @@ class SetupAll extends CommandAbstract
 					$projectName,
 					$sftpPass
 				));
+
+				Util::output("\n\n" . str_repeat('*', 30) . "\n\n");
 
 				Util::output("To finish installation, run the following command under your root account (use sudo):\n");
 				$cmd = "php esutil.phar magento2/installInsideDocker --docker-skeleton-path=\"$path\" --docker-skeleton-name=\"$name\" --docker-skeleton-port-prefix=\"$portPrefix\" --docker-skeleton-mysql-password=\"$dbPass\" --magento2-base-url=\"$baseUrl\" --magento2-docroot-path=\"$path/www/html/\" --magento2-set-owner=\"www-data:www-data\"";
