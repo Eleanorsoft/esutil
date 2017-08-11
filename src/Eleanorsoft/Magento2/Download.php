@@ -10,7 +10,7 @@ class Download extends CommandAbstract
 
     public function run(ArgumentList $argumentList)
     {
-        Util::output("Download Magento2... ");
+        Util::output("Download Wordpress... ");
 
         if (!class_exists('\Locale')) {
             die("intl extension for PHP not found");

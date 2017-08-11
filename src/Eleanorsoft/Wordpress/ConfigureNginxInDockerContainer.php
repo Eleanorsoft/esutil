@@ -1,6 +1,6 @@
 <?php
 
-namespace Eleanorsoft\Magento2;
+namespace Eleanorsoft\Wordpress;
 use Eleanorsoft\Docker\NginxConfig\AbstractConfigureNginxInDockerContainer;
 use Eleanorsoft\Phar\ArgumentList;
 use Eleanorsoft\Phar\CommandAbstract;
@@ -11,6 +11,6 @@ class ConfigureNginxInDockerContainer extends AbstractConfigureNginxInDockerCont
 
     public function run(ArgumentList $argumentList)
     {
-        $this->configureNginxFromTemplate('default_magento.conf', $argumentList);
+        $this->configureNginxFromTemplate('default_wordpress.conf', $argumentList);
     }
 }

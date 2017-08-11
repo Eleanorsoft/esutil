@@ -7,8 +7,9 @@ require 'config.php';
 \Eleanorsoft\Util::output(sprintf("by Eleanorsoft (https://www.eleanorsoft.com/)\n\n"));
 
 $aliases = array(
+    'docker/' => 'Eleanorsoft\\Docker',
 	'magento2/' => 'Eleanorsoft\\Magento2',
-	'docker/' => 'Eleanorsoft\\Docker',
+	'wordpress/' => 'Eleanorsoft\\Wordpress',
 );
 
 $cmd = $argv[1];
