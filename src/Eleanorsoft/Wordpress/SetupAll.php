@@ -48,7 +48,7 @@ class SetupAll extends CommandAbstract
 
                 $delayBeforeInstall = $argumentList->get(
                     'wordpress-delay-before-install-in-seconds',
-                    10,
+                    11,
                     [IntegerFormatter::class]
                 );
 				sleep($delayBeforeInstall);
