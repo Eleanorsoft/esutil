@@ -2,10 +2,13 @@
 
 namespace Eleanorsoft\Phar;
 
+use Eleanorsoft\Phar\Argument\FormatterInterface;
 use Eleanorsoft\Util;
 
 class ArgumentList
 {
+
+    const EMPTY_TO_SKIP = '(leave blank to skip action)';
 
     protected $arguments = array();
     protected $stdin = null;
@@ -32,8 +35,24 @@ class ArgumentList
         $this->arguments[$k] = $v;
     }
 
-    public function get($k, $default = null)
+    /**
+     * Get command argument.
+     * Formatters allow preprocessing of user input.
+     *
+     * @param $k
+     * @param mixed $default
+     * @param FormatterInterface[]|FormatterInterface $formatters
+     * @return mixed
+     */
+    public function get($k, $default = null, $formatters = [])
     {
+        if (!is_array($formatters)) {
+            $formatters = [$formatters];
+        }
+        $defaultValue = $default;
+        if ($default == self::EMPTY_TO_SKIP) {
+            $defaultValue = false;
+        }
 
         $value = null;
         if (isset($this->arguments[$k])) {
@@ -48,7 +67,13 @@ class ArgumentList
             Util::output(sprintf('Enter "%s"%s: ', $k, $defValue));
             $value = trim(fgets($this->stdin));
             if (!$value) {
-                $value = $default;
+                $value = $defaultValue;
+            }
+
+            foreach ($formatters as $formatterClass) {
+                /** @var FormatterInterface $formatter */
+                $formatter = new $formatterClass();
+                $value = $formatter->format($value);
             }
         }
 

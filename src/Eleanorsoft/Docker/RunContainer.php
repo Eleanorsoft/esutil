@@ -19,6 +19,10 @@ class RunContainer extends CommandAbstract
             chdir(realpath($path));
         }
 
+        $cmd = 'docker-compose build';
+        Util::output("Run `$cmd`\n");
+        `$cmd`;
+
         $cmd = 'docker-compose up -d';
         Util::output("Run `$cmd`\n");
         `$cmd`;
