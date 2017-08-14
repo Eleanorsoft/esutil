@@ -73,7 +73,7 @@ class SetupAll extends CommandAbstract
 				);
 				$context  = stream_context_create($opts);
                 $a = file_get_contents($baseUrl);
-                print $a;
+                var_dump($a);
 				file_get_contents($url, false, $context, -1, 40000);;
 
 				Util::output("\n\n" . str_repeat('*', 30) . "\n\n");
