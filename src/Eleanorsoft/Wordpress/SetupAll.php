@@ -6,6 +6,7 @@ use Eleanorsoft\Docker\CreateSkeleton;
 use Eleanorsoft\Docker\CheckDocker;
 use Eleanorsoft\Docker\RunContainer;
 use Eleanorsoft\Docker\SetDocrootOwner;
+use Eleanorsoft\Http\WaitForWebserverToGetOnline;
 use Eleanorsoft\Phar\Argument\Formatter\IntegerFormatter;
 use Eleanorsoft\Phar\Argument\Formatter\PathFormatter;
 use Eleanorsoft\Phar\ArgumentList;
@@ -31,6 +32,15 @@ class SetupAll extends CommandAbstract
 			SetDocrootOwner::class,
 			RunContainer::class,
 			function (ArgumentList $argumentList) {
+				$domain = $argumentList->get('wordpress-domain'); // without protocol
+				$portPrefix = $argumentList->get('docker-skeleton-port-prefix');
+				$nginxPort = $portPrefix . '1';
+				$baseUrl = "http://$domain:$nginxPort/";
+				$argumentList->set('webserver-url', $baseUrl);
+			},
+			WaitForWebserverToGetOnline::class,
+			InstallViaHttp::class,
+			function (ArgumentList $argumentList) {
 				$portPrefix = $argumentList->get('docker-skeleton-port-prefix');
 				$dbPass = $argumentList->get('docker-skeleton-mysql-password');
 				$sftpPass = $argumentList->get('docker-skeleton-sftp-password');
@@ -39,42 +49,12 @@ class SetupAll extends CommandAbstract
 				$projectName = $argumentList->get('docker-skeleton-name', 'noname');
 				$nginxPort = $portPrefix . '1';
 
-				$adminName = $projectName . 'admin';
-				$adminPassword = $this->generateAdminPassword();
+				$adminName = $argumentList->get('worpress-admin-name');
+				$adminPassword = $argumentList->get('worpress-admin-password');
 
 				$baseUrl = "http://$domain:$nginxPort/";
 
-				$url = $baseUrl . 'wp-admin/install.php?step=2';
 
-                $delayBeforeInstall = $argumentList->get(
-                    'wordpress-delay-before-install-in-seconds',
-                    11,
-                    [IntegerFormatter::class]
-                );
-				sleep($delayBeforeInstall);
-
-				$opts = array('http' =>
-					array(
-						'method'  => 'POST',
-						'header' => 'Content-Type: application/x-www-form-urlencoded',
-						'content' => http_build_query([
-							'weblog_title' => $projectName,
-							'user_name' => $adminName,
-							'admin_email' => 'noreply@gmail.com',
-							'admin_password' => $adminPassword,
-							'admin_password2' => $adminPassword,
-							'pw_weak' => 'on',
-							'language' => '',
-							'pass1-text' => $adminPassword,
-							'Submit' => 'Install WordPress',
-						]),
-						'timeout' => 60
-					)
-				);
-				$context  = stream_context_create($opts);
-                $a = file_get_contents($baseUrl);
-                var_dump($a);
-				file_get_contents($url, false, $context, -1, 40000);;
 
 				Util::output("\n\n" . str_repeat('*', 30) . "\n\n");
 
@@ -93,7 +73,7 @@ class SetupAll extends CommandAbstract
 				));
                 Util::output(sprintf(
                     "Admin:\n\tHost: %s\n\tLogin: %s\n\tPassword: %s\n\n",
-                    $baseUrl . '/wp-admin/',
+                    $baseUrl . 'wp-admin/',
                     $adminName,
                     $adminPassword
                 ));
