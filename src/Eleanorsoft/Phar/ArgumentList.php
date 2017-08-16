@@ -14,6 +14,12 @@ class ArgumentList
     protected $stdin = null;
 
     /**
+     * List of arguments which were received from the user
+     * @var array
+     */
+    protected $askedArguments = [];
+
+    /**
      * ArgumentList constructor.
      * @param array $args
      */
@@ -26,6 +32,7 @@ class ArgumentList
                 $name = trim(substr($v, 0, $eq), "- \t");
                 $value = trim(trim(substr($v, $eq + 1)), '"');
                 $this->set($name, $value);
+                $this->askedArguments[$name] = $value;
             }
         }
     }
@@ -75,10 +82,25 @@ class ArgumentList
                 $formatter = new $formatterClass();
                 $value = $formatter->format($value);
             }
+
+            $this->askedArguments[$k] = $value;
         }
 
         $this->set($k, $value);
 
         return $value;
+    }
+
+    /**
+     * Format asked arguments as a string which can be used as
+     * argument list for the command
+     */
+    public function getAskedArgumentsString()
+    {
+        $arguments = [];
+        foreach ($this->askedArguments as $k => $v) {
+            $arguments[] = sprintf('--%s="%s"', $k, $v);
+        }
+        return implode(' ', $arguments);
     }
 }

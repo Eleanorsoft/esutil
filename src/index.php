@@ -34,6 +34,14 @@ $args = new \Eleanorsoft\Phar\ArgumentList(array_slice($argv, 2));
 $c = new $class();
 $c->run($args);
 
+\Eleanorsoft\Util::output(
+	sprintf(
+		"\n\nFull command could be:\nphp esutil.phar %s %s",
+		$argv[1],
+		$args->getAskedArgumentsString()
+	)
+);
+
 /**
  * Autoload function for files inside phar archive
  *
