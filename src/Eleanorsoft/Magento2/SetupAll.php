@@ -1,6 +1,6 @@
 <?php
 
-namespace Eleanorsoft\Wordpress;
+namespace Eleanorsoft\Magento2;
 use Eleanorsoft\Docker\CreateSkeleton;
 use Eleanorsoft\Phar\ArgumentList;
 use Eleanorsoft\Phar\CommandAbstract;
