@@ -36,7 +36,7 @@ $c->run($args);
 
 \Eleanorsoft\Util::output(
 	sprintf(
-		"\n\nFull command could be:\nphp esutil.phar %s %s",
+		"\n\nFull command could be:\nphp esutil.phar %s %s\n\n",
 		$argv[1],
 		$args->getAskedArgumentsString()
 	)

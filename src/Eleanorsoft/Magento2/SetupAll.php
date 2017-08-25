@@ -1,7 +1,11 @@
 <?php
 
 namespace Eleanorsoft\Magento2;
+use Eleanorsoft\Docker\CheckDocker;
 use Eleanorsoft\Docker\CreateSkeleton;
+use Eleanorsoft\Docker\RunContainer;
+use Eleanorsoft\Docker\SetDocrootOwner;
+use Eleanorsoft\Http\WaitForWebserverToGetOnline;
 use Eleanorsoft\Phar\ArgumentList;
 use Eleanorsoft\Phar\CommandAbstract;
 use Eleanorsoft\Util;
@@ -12,6 +16,7 @@ class SetupAll extends CommandAbstract
 	public function __construct()
 	{
 		parent::__construct([
+			CheckDocker::class,
 			CreateSkeleton::class,
 			ConfigureNginxInDockerContainer::class,
 			function (ArgumentList $argumentList) {
@@ -22,9 +27,23 @@ class SetupAll extends CommandAbstract
 				@unlink($path . '/www/html/index.php');
 			},
 			Download::class,
+			SetDocrootOwner::class,
+            RunContainer::class,
 			function (ArgumentList $argumentList) {
 				$path = rtrim($argumentList->get('docker-skeleton-path', './'), '/');
-				$name = $argumentList->get('docker-skeleton-name');
+				$portPrefix = $argumentList->get('docker-skeleton-port-prefix');
+				$domain = $argumentList->get('magento2-domain'); // without protocol
+				$nginxPort = $portPrefix . '1';
+				$baseUrl = "http://$domain:$nginxPort/";
+
+                $argumentList->set('webserver-url', $baseUrl);
+				$argumentList->set('magento2-base-url', $baseUrl);
+				$argumentList->set('magento2-docroot-path', "$path/www/html/");
+			},
+            WaitForWebserverToGetOnline::class,
+			InstallInsideDocker::class,
+			function (ArgumentList $argumentList)
+			{
 				$portPrefix = $argumentList->get('docker-skeleton-port-prefix');
 				$dbPass = $argumentList->get('docker-skeleton-mysql-password');
 				$sftpPass = $argumentList->get('docker-skeleton-sftp-password');
@@ -52,10 +71,6 @@ class SetupAll extends CommandAbstract
 				));
 
 				Util::output("\n\n" . str_repeat('*', 30) . "\n\n");
-
-				Util::output("To finish installation, run the following command under your root account (use sudo):\n");
-				$cmd = "php esutil.phar magento2/installInsideDocker --docker-skeleton-path=\"$path\" --docker-skeleton-name=\"$name\" --docker-skeleton-port-prefix=\"$portPrefix\" --docker-skeleton-mysql-password=\"$dbPass\" --magento2-base-url=\"$baseUrl\" --magento2-docroot-path=\"$path/www/html/\" --magento2-set-owner=\"www-data:www-data\"";
-				Util::output($cmd . "\n\n");
 			}
 		]);
 	}
@@ -63,6 +78,5 @@ class SetupAll extends CommandAbstract
 	public function run(ArgumentList $argumentList)
 	{
 		parent::run($argumentList);
-		print "Setting up Magento2...\n";
 	}
 }

@@ -10,8 +10,6 @@ class InstallInsideDocker extends CommandAbstract
 
     public function run(ArgumentList $argumentList)
     {
-        Util::output("Run container... \n");
-
         $path = rtrim($argumentList->get('docker-skeleton-path', './'), '/');
         $tmp = explode('/', str_replace(DIRECTORY_SEPARATOR, '/', realpath($path)));
         $lastDir = array_pop($tmp);
@@ -19,17 +17,6 @@ class InstallInsideDocker extends CommandAbstract
             $lastDir = array_pop($tmp);
         }
         $lastDir = preg_replace('/\W/', '', $lastDir);
-
-        $docroot = rtrim($argumentList->get('magento2-docroot-path', './'), '/');
-
-        $newOwner = trim($argumentList->get('magento2-set-owner', '')); // empty to skip
-        if ($newOwner) {
-            if (Util::isWindows()) {
-                Util::output("Skip chown as working on Windows\n");
-            } else {
-                `chown -R $newOwner $docroot`;
-            }
-        }
 
         $projectName = $argumentList->get('docker-skeleton-name', 'noname');
         $adminName = $projectName . 'admin';
@@ -55,10 +42,6 @@ class InstallInsideDocker extends CommandAbstract
             chdir(realpath($path));
         }
 
-        $cmd = 'docker-compose up -d';
-        Util::output("Run `$cmd`\n");
-        `$cmd`;
-
         $output = `docker ps`;
         $outputRows = explode("\n", $output);
         $containerId = null;
@@ -74,9 +57,16 @@ class InstallInsideDocker extends CommandAbstract
             die("Can't find container id for $phpContainerName");
         }
 
+        // docker may take some time to start... we have to wait in case of an error
         $cmd = "docker exec -it --user 33 $containerId sh -c \"php bin/magento setup:install --admin-firstname='John' --admin-lastname='Doe' --admin-email='hello@eleanorsoft.com' --admin-user='$adminName' --admin-password='$adminPassword' --base-url='$baseUrl' --backend-frontname='$adminName' --db-host='{$projectName}_mysql' --db-name='{$projectName}' --db-user='{$projectName}' --db-password='$mysqlPassword' --use-rewrites=1 --language=en_US --currency=USD --timezone=America/Chicago\"";
-        Util::output("Run `$cmd`\n");
-        `$cmd`;
+        do {
+            Util::output("Run `$cmd`\n");
+            passthru($cmd, $err);
+            if ($err) {
+                Util::output("Got error. Wait for 5 seconds...\n");
+                sleep(5);
+            }
+        } while ($err);
 
         if ($currentPath != realpath($path)) {
             chdir($currentPath);
