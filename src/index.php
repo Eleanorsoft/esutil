@@ -9,6 +9,7 @@ require 'config.php';
 $aliases = array(
     'docker/' => 'Eleanorsoft\\Docker',
 	'magento2/' => 'Eleanorsoft\\Magento2',
+	'magento1/' => 'Eleanorsoft\\Magento1',
 	'wordpress/' => 'Eleanorsoft\\Wordpress',
 );
 
