@@ -31,8 +31,12 @@ class Backup extends CommandAbstract
             $outputFile = $argumentList->get('magento2-backup-output-tar-file', '../mag' . date('Ymd') . '.tar.gz');
 
             $include = [
-                '/*.*',
-                '/.*',
+                '/.htaccess',
+                '/.htaccess.sample',
+                '/.php_cs',
+                '/.travis.yml',
+                '/.user.ini',
+                '/.gitignore',
                 '/app/',
                 '/bin/',
                 '/dev/',
@@ -57,7 +61,7 @@ class Backup extends CommandAbstract
             $cmd = "tar -zcvf $outputFile $includeString";
             `$cmd`;
 
-            Util::output("Backed up files: $outputFile");
+            Util::output("Backed up files: $outputFile\n");
         }
 
         $backupDatabase = $argumentList->get('magento2-backup-database', 'y', [BooleanFormatter::class]);
@@ -78,7 +82,7 @@ class Backup extends CommandAbstract
             $cmd = "mysqldump -u $dbUser -p$dbPass -h$dbHost $dbName | gzip > $outputFile";
             `$cmd`;
 
-            Util::output("Backed up DB: $outputFile");
+            Util::output("Backed up DB: $outputFile\n");
         }
     }
 }

@@ -37,7 +37,7 @@ class Backup extends CommandAbstract
             $cmd = "tar -zcvf $outputFile $exclude $path/*.php $path/.htaccess $path/wp-admin/ $path/wp-includes/ $path/wp-content/";
             `$cmd`;
 
-            Util::output("Backed up files: $outputFile");
+            Util::output("Backed up files: $outputFile\n");
         }
 
         $backupDatabase = $argumentList->get('wordpress-backup-database', 'y', [BooleanFormatter::class]);
@@ -67,7 +67,7 @@ class Backup extends CommandAbstract
             $cmd = "mysqldump -u $dbUser -p$dbPass -h$dbHost $dbName | gzip > $outputFile";
             `$cmd`;
 
-            Util::output("Backed up DB: $outputFile");
+            Util::output("Backed up DB: $outputFile\n");
         }
     }
 }
