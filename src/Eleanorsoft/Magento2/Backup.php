@@ -31,6 +31,7 @@ class Backup extends CommandAbstract
             $outputFile = $argumentList->get('magento2-backup-output-tar-file', '../mag' . date('Ymd') . '.tar.gz');
 
             $include = [
+                '/*.*',
                 '/.htaccess',
                 '/.htaccess.sample',
                 '/.php_cs',
@@ -46,7 +47,8 @@ class Backup extends CommandAbstract
                 '/update/',
                 '/var/.htaccess',
                 '/pub/*.*',
-                '/pub/.*',
+                '/pub/.htaccess',
+                '/pub/.user.ini',
                 '/pub/opt/',
             ];
             if ($backupMedia) {
