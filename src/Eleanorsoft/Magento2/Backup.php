@@ -46,9 +46,10 @@ class Backup extends CommandAbstract
                 '/setup/',
                 '/update/',
                 '/var/.htaccess',
-                '/pub/*.*',
+                '/pub/errors/',
                 '/pub/.htaccess',
                 '/pub/.user.ini',
+                '/pub/*.php',
                 '/pub/opt/',
             ];
             if ($backupMedia) {
