@@ -20,9 +20,9 @@ class Backup extends CommandAbstract
 {
     public function run(ArgumentList $argumentList)
     {
-        $path = $argumentList->get('magento1-root-path', './', [PathFormatter::class]);
+        $path = $argumentList->get('magento1-root-path', './', array(PathFormatter::class));
 
-        $backupFiles = $argumentList->get('magento1-backup-files', 'y', [BooleanFormatter::class]);
+        $backupFiles = $argumentList->get('magento1-backup-files', 'y', array(BooleanFormatter::class));
 
         // backup files
         if ($backupFiles) {
