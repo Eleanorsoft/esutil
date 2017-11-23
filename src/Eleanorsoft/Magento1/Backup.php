@@ -29,7 +29,7 @@ class Backup extends CommandAbstract
             $backupMedia = $argumentList->get('magento1-backup-media-dir', 'n', array(BooleanFormatter::class));
             $outputFile = $argumentList->get('magento1-backup-output-tar-file', '../mag' . date('Ymd') . '.tar.gz');
 
-            $include = [
+            $include = array(
                 '/*.*',
                 '/.htaccess',
                 '/.htaccess.sample',
@@ -44,7 +44,7 @@ class Backup extends CommandAbstract
                 '/skin/',
                 '/var/.htaccess',
                 '/var/package/',
-            ];
+            );
             if ($backupMedia) {
                 $include[] = '/media/';
             }
