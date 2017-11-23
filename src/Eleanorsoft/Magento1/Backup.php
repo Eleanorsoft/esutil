@@ -26,7 +26,7 @@ class Backup extends CommandAbstract
 
         // backup files
         if ($backupFiles) {
-            $backupMedia = $argumentList->get('magento1-backup-media-dir', 'n', [BooleanFormatter::class]);
+            $backupMedia = $argumentList->get('magento1-backup-media-dir', 'n', array(BooleanFormatter::class));
             $outputFile = $argumentList->get('magento1-backup-output-tar-file', '../mag' . date('Ymd') . '.tar.gz');
 
             $include = [
@@ -57,7 +57,7 @@ class Backup extends CommandAbstract
             Util::output("Backed up files: $outputFile\n");
         }
 
-        $backupDatabase = $argumentList->get('magento1-backup-database', 'y', [BooleanFormatter::class]);
+        $backupDatabase = $argumentList->get('magento1-backup-database', 'y', array(BooleanFormatter::class));
 
         // backup database
         if ($backupDatabase) {
