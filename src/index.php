@@ -21,7 +21,6 @@ foreach ($aliases as $k => $v) {
 		break;
 	}
 }
-var_dump($cmd);
 
 $tmp = explode('/', $cmd);
 $tmp = array_map('ucfirst', $tmp);
