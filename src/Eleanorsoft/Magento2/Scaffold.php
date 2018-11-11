@@ -57,6 +57,7 @@ class Scaffold extends CommandAbstract
                 'module' => $classParts[1],
                 'controller' => @$classParts[2] == 'Controller' ? @$classParts[count($classParts) - 2] : null,
                 'action' => @$classParts[2] == 'Controller' ? end($classParts) : null,
+                'model' => @$classParts[2] == 'Model' ? end($classParts) : null,
             ]
         );
 
@@ -102,11 +103,16 @@ class Scaffold extends CommandAbstract
                 'placeholder' => '__Action__',
                 'value' => @$config['action'],
             ],
+            'magento2-model-name' => [
+                'default' => 'Item',
+                'placeholder' => '__Model__',
+                'value' => @$config['model'],
+            ],
         ];
 
         $replaceArgs = ['placeholders' => [], 'values' => []];
         foreach ($placeholders as $code => $config) {
-            if (!$config['value']) {
+            if ($config['value'] === false) {
                 $config['value'] = $this->getArgument($code, $config['default']);
             }
 
@@ -214,7 +220,16 @@ class Scaffold extends CommandAbstract
 
     protected function getGithubRepoNameByClassParts($classParts)
     {
-        return 'm2-' . implode('-', array_map('strtolower', array_slice($classParts, 2, -2)));
+        if (count($classParts) == 2) {
+            return 'm2-module';
+        }
+        if (@$classParts[2] == 'Setup') {
+            return 'm2-setup';
+        }
+        if (@$classParts[2] == 'Controller') {
+            return 'm2-' . implode('-', array_map('strtolower', array_slice($classParts, 2, -2)));
+        }
+        return 'm2-' . implode('-', array_map('strtolower', array_slice($classParts, 2, -1)));
     }
 
     protected function getRepoLocalId($repoId)
