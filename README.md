@@ -1,5 +1,5 @@
 # Esutil
-Handful utility for different development tasks.
+Helpful utility for different development tasks.
 
 
 ## Scaffolding for Magento 2
