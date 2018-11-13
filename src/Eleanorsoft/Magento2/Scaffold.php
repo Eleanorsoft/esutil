@@ -36,7 +36,7 @@ class Scaffold extends CommandAbstract
         $this->prepareFS();
 
         // full class name: Namespace\ModuleName\Type\Of\Class\ClassName
-        $className = $this->getArgument('class-name');
+        $className = $this->getArgument('type');
         $classParts = explode('\\', $className);
 
         // download and extract
